@@ -17,7 +17,7 @@ function Get-FirstBusinessDayBeforeDate {
         [datetime]$date,
         [int]$before = 0
     )
-    $i = 1
+    $i = $before -1
     $valid = $false
     do {
         $i++
@@ -27,8 +27,9 @@ function Get-FirstBusinessDayBeforeDate {
     while ( !$valid )
     [PSCustomObject]@{
         Date            = $date
-        Weekday         = $date.DayOfWeek
-        Reminder        = $reminderDate
-        ReminderWeekday = $reminderDate.DayOfWeek
+        WeekDay         = $date.DayOfWeek
+        BusinessDayBefore        = $reminderDate
+        BusinessDayWeekDay = $reminderDate.DayOfWeek
+        DateDiff = $i
     }
 }
