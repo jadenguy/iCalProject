@@ -19,16 +19,14 @@ function Get-FirstBusinessDayBeforeDate {
         [datetime]$date,
         [int]$before = 0
     )
-    # since we're adding 1 to the day before calculating if it's a business day every time, even if you want the same date, first subtract a day
-    $i = $before - 1
-    # run through the logic once and get an answer for valid
-    do {
+    # start with i days back as guessed by the 'before' date, then subtract days from there
+    $i = $before
+    # run through the logic once and get an answer for valid, and keeps looking back futher until it finds it.
+    while ( !( Test-BusinessDay $date.AddDays(-$i) ) ) {
         $i++
-        # checks the reminder date in question
-        $reminderDate = $date.AddDays(-$i)
-        $valid = Test-BusinessDay $reminderDate
     } 
-    while ( !$valid )
+    # uses that date
+    $reminderDate = $date.AddDays(-$i)
     # returns an object containing the date you asked for, it's weekday, the reminder date, it's weekday, and how many days back that is, useful since we multiply that to hours for the reminder date
     [PSCustomObject]@{
         Date               = $date
