@@ -74,9 +74,13 @@ class IcsEvent {
         # write-host $this.ToString()
         return $starts -and $startsBeforeEnds -and $reminderValid
     }
-    [void] SetReminder([TimeSpan]$timeSpan) {
+    [void] SetReminder([int]$BusinessDaysBefore, [int] $HoursBefore = 0) {
         $this.Reminder = $true
-        $this.ReminderDelta = $timeSpan
+        $this.ReminderDelta =  New-Timespan -Days (Get-FirstBusinessDayBeforeDate -date ($this.Start) -before $BusinessDaysBefore).DateDiff -Hours $HoursBefore
+    }
+    [void] SetReminder([int]$BusinessDaysBefore) {
+        $this.Reminder = $true
+        $this.ReminderDelta =  New-Timespan -Days (Get-FirstBusinessDayBeforeDate -date ($this.Start) -before $BusinessDaysBefore).DateDiff
     }
     [IcsEvent]static Create() {
         $event = New-Object "IcsEvent"
