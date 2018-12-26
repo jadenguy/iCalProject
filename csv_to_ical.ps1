@@ -14,25 +14,27 @@ $calendars | ForEach-Object {
     [void]$ical.AppendLine('BEGIN:VCALENDAR')
     [void]$ical.AppendLine('VERSION:2.0')
     [void]$ical.AppendLine('METHOD:PUBLISH')
-    [void]$ical.AppendLine('PRODID:-//Braunweb//PowerShell ICS Creator Sample//EN')
+    [void]$ical.AppendLine('PRODID:Alfredo_PowerShell_Script')
     [void]$ical.AppendLine('X-WR-CALNAME:' + $calendar) # This is where the title in Outlook comes from. Took a while to get this one right.
-    [void]$ical.AppendLine('X-WR-TIMEZONE:America/New_York')
+    [void]$ical.AppendLine("X-WR-TIMEZONE:America/New_York")
     [void]$ical.AppendLine("BEGIN:VTIMEZONE")
     [void]$ical.AppendLine("TZID:America/New_York")
-    [void]$ical.AppendLine("LAST-MODIFIED:20050809T050000Z")
-    [void]$ical.AppendLine("BEGIN:STANDARD")
-    [void]$ical.AppendLine("DTSTART:20071104T020000")
-    [void]$ical.AppendLine("TZOFFSETFROM:-0400")
-    [void]$ical.AppendLine("TZOFFSETTO:-0500")
-    [void]$ical.AppendLine("TZNAME:EST")
-    [void]$ical.AppendLine("END:STANDARD")
+    [void]$ical.AppendLine("X-LIC-LOCATION:America/New_York")
     [void]$ical.AppendLine("BEGIN:DAYLIGHT")
-    [void]$ical.AppendLine("DTSTART:20070311T020000")
     [void]$ical.AppendLine("TZOFFSETFROM:-0500")
     [void]$ical.AppendLine("TZOFFSETTO:-0400")
     [void]$ical.AppendLine("TZNAME:EDT")
+    [void]$ical.AppendLine("DTSTART:19700308T020000")
+    [void]$ical.AppendLine("RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU")
     [void]$ical.AppendLine("END:DAYLIGHT")
-    [void]$ical.AppendLine("END:VTIMEZONE")    
+    [void]$ical.AppendLine("BEGIN:STANDARD")
+    [void]$ical.AppendLine("TZOFFSETFROM:-0400")
+    [void]$ical.AppendLine("TZOFFSETTO:-0500")
+    [void]$ical.AppendLine("TZNAME:EST")
+    [void]$ical.AppendLine("DTSTART:19701101T020000")
+    [void]$ical.AppendLine("RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU")
+    [void]$ical.AppendLine("END:STANDARD")
+    [void]$ical.AppendLine("END:VTIMEZONE")
     # find relevant events in the table
     $events = $table|Where-Object -Property TYPE -eq $calendar
     $events | ForEach-Object {
@@ -68,8 +70,7 @@ $calendars | ForEach-Object {
 
 # Useful links:
 # partially using https://justinbraun.com/2018/01/powershell-dynamic-generation-of-an-ical-vcalendar-ics-format-file/
-# //www.marudot.com//iCal
 # https://stackoverflow.com/questions/35645402/how-to-specify-timezone-in-ics-file-which-will-work-efficiently-with-google-outl
-
+# https://apps.marudot.com/ical/
 # SharePoint Shared Calendar (another direciotn we can take this project)
 # stssync://sts/?ver=1.1&type=calendar&cmd=add-folder&base-url=https%3A%2F%2Fattentiem%2Esharepoint%2Ecom%2Fsites%2Fusac%2Emmm&list-url=%2FLists%2FBiWeekly%2520Payroll%2F&guid=%7B9cd4bb9e%2Df405%2D40f8%2D9727%2D614ea89a15b1%7D&site-name=Attenti%20Electronic%20Monitoring&list-name=Bi%2DWeekly%20Payroll
