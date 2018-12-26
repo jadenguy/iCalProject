@@ -66,7 +66,7 @@ function ConvertTo-iCal {
         [void]$ical.AppendLine('BEGIN:VCALENDAR')
         [void]$ical.AppendLine('VERSION:2.0')
         [void]$ical.AppendLine('METHOD:PUBLISH')
-        [void]$ical.AppendLine('PRODID:Alfredo_PowerShell_Script')
+        [void]$ical.AppendLine('PRODID:New_Ics_PowerShell_Script')
         [void]$ical.AppendLine('X-WR-CALNAME:' + $calendar)
         [void]$ical.AppendLine("X-WR-TIMEZONE:America/New_York")
         [void]$ical.AppendLine("BEGIN:VTIMEZONE")
@@ -100,14 +100,14 @@ function ConvertTo-iCal {
             [void]$ical.AppendLine("SEQUENCE:0")
             [void]$ical.AppendLine("DTSTART;TZID=America/New_York:" + $event.Start.ToString($longDateFormat))
             [void]$ical.AppendLine("DTEND;TZID=America/New_York:" + $event.End.ToString($longDateFormat))
-            [void]$ical.AppendLine("DESCRIPTION:" + $calendar)
-            [void]$ical.AppendLine("SUMMARY:" + $calendar)
-            [void]$ical.AppendLine("LOCATION:" + $calendar)
+            [void]$ical.AppendLine("DESCRIPTION:" + $event.Description)
+            [void]$ical.AppendLine("SUMMARY:" + $event.Summary)
+            [void]$ical.AppendLine("LOCATION:" + $event.Location)
             [void]$ical.AppendLine("TRANSP:TRANSPARENT")        
             if ($event.ReminderDelta.TotalMilliseconds) {
                 [void]$ical.AppendLine("BEGIN:VALARM")
                 [void]$ical.AppendLine("ACTION:DISPLAY")
-                [void]$ical.AppendLine("DESCRIPTION:Submit $calendar")
+                [void]$ical.AppendLine("DESCRIPTION:Reminder: $calendar")
                 #this is where we use the reminder days before        
                 [void]$ical.AppendLine("TRIGGER:-P$($event.ReminderDelta.Days)DT$($event.ReminderDelta.Hours)H$($event.ReminderDelta.Minutes)M$($event.ReminderDelta.Seconds)S")
                 [void]$ical.AppendLine("END:VALARM")
@@ -122,7 +122,7 @@ function ConvertTo-iCal {
     }
 }
 
-$x = [IcsEvent]::new('hello', '2018-01-01 12:00', 1, 4)
-$x.End = get-date
-ConvertTo-iCal | Out-GridView
-ConvertTo-iCal -event $x -calendar "hello_calendar"
+$x = [IcsEvent]::new('hello', '2019-01-01 12:00', 1, 4)
+$x.End = $x.Start.addhours(1)
+ConvertTo-iCal -event $x -calendar "hello_calendar" | Set-Content hello.ics
+Start-Process hello.ics
