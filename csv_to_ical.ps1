@@ -4,30 +4,31 @@
 new-item -Path $PSScriptRoot -Name results -ItemType Directory -Force | Out-Null
 $table = Get-Content .\events.csv|ConvertFrom-Csv
 # Creates list of each type of heading in eventEntries table
-$calendars = $table.TYPE|Sort-Object -Unique
+$calendars = $table | Group-Object -property 'TYPE'
 # Goes through list again, once per event type
 $calendars | ForEach-Object {
     $calendar = $_
+    $calendarName = $calendar.Name
     # find relevant eventEntries in the table
     $eventEntries = @()
-    $events = $table | Where-Object -Property TYPE -eq $calendar 
+    $events = $calendar.Group
     $events | ForEach-Object {
         $event = $_
         $args = @{
-            Summary       = $event.TYPE
-            Description   = $event.TYPE
-            Start         = (get-date $event.DATE).AddHours(8)
-            End           = (get-date $event.DATE).AddHours(12)
-            ReminderDelta = (New-TimeSpan -Days $event.BEFORE)
-            Reminder      = $true
+            Summary     = $event.TYPE
+            Description = $event.TYPE
+            Start       = (get-date $event.DATE).AddHours(8)
+            End         = (get-date $event.DATE).AddHours(12)
         }
         $icsEvent = New-Object "IcsEvent" -Property $args
+        $icsEvent.SetReminder( $event.BEFORE, 0)
         if ($icsEvent.Validate()) {
             $eventEntries += $icsEvent
         }
     }
     # and this writes the file out
-    $eventEntries|ConvertTo-iCal -calendar $calendar|Set-Content ".\results\$calendar.ics"
+    $eventEntries|ConvertTo-iCal -calendar $calendarName|Set-Content ".\results\$calendarName.ics"
+    # Start-Process ".\results\$calendarName.ics" # uncomment this line to open each file on creation
 }
 
 # Useful links:
