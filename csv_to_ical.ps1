@@ -58,7 +58,8 @@ $calendars | ForEach-Object {
         [void]$ical.AppendLine("BEGIN:VALARM")
         [void]$ical.AppendLine("ACTION:DISPLAY")
         [void]$ical.AppendLine("DESCRIPTION:Submit $calendar")
-        [void]$ical.AppendLine("TRIGGER:-P0DT$($reminder.DateDiff*24)H0M0S")
+        #this is where we use the reminder days before        
+        [void]$ical.AppendLine("TRIGGER:-P$($reminder.DateDiff)DT0H0M0S")
         [void]$ical.AppendLine("END:VALARM")
         [void]$ical.AppendLine('END:VEVENT')
     }
@@ -72,5 +73,7 @@ $calendars | ForEach-Object {
 # partially using https://justinbraun.com/2018/01/powershell-dynamic-generation-of-an-ical-vcalendar-ics-format-file/
 # https://stackoverflow.com/questions/35645402/how-to-specify-timezone-in-ics-file-which-will-work-efficiently-with-google-outl
 # https://apps.marudot.com/ical/
+# AND TO IMPORT https://thescriptkeeper.wordpress.com/2013/09/27/import-a-bunch-of-ics-calendar-files-with-powershell/
+
 # SharePoint Shared Calendar (another direciotn we can take this project)
 # stssync://sts/?ver=1.1&type=calendar&cmd=add-folder&base-url=https%3A%2F%2Fattentiem%2Esharepoint%2Ecom%2Fsites%2Fusac%2Emmm&list-url=%2FLists%2FBiWeekly%2520Payroll%2F&guid=%7B9cd4bb9e%2Df405%2D40f8%2D9727%2D614ea89a15b1%7D&site-name=Attenti%20Electronic%20Monitoring&list-name=Bi%2DWeekly%20Payroll
