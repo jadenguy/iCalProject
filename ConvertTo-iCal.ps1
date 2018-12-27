@@ -71,6 +71,7 @@ class IcsEvent {
         else {
             $reminderValid = $true
         }
+
         # write-host $this.ToString()
         return $starts -and $startsBeforeEnds -and $reminderValid
     }

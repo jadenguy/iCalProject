@@ -19,6 +19,8 @@ function Get-FirstBusinessDayBeforeDate {
         [datetime]$date = (get-date),
         [int]$before = 0
     )
+    $i = 0
+    $skipDays = 0
     do {
         do {
             $businessDaysBack = $i + $skipDays
@@ -32,7 +34,7 @@ function Get-FirstBusinessDayBeforeDate {
     } while ($i -le $before)
     # uses that date
     # returns an object containing the date you asked for, it's weekday, the reminder date, it's weekday, and how many days back that is, useful since we multiply that to hours for the reminder date
-    [PSCustomObject]@{
+    $ret = [PSCustomObject]@{
         Date               = $date
         WeekDay            = $date.DayOfWeek
         BusinessDayBefore  = $testDate
@@ -40,4 +42,5 @@ function Get-FirstBusinessDayBeforeDate {
         DateDiff           = $businessDaysBack
         BusinessDateDiff   = $before
     }
+    return $ret
 }
