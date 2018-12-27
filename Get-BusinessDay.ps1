@@ -16,23 +16,28 @@ function Test-BusinessDay {
 function Get-FirstBusinessDayBeforeDate {
     [CmdletBinding()]
     param (
-        [datetime]$date,
+        [datetime]$date = (get-date),
         [int]$before = 0
     )
-    # start with i days back as guessed by the 'before' date, then subtract days from there
-    $i = $before
-    # run through the logic once and get an answer for valid, and keeps looking back futher until it finds it.
-    while ( !( Test-BusinessDay $date.AddDays(-$i) ) ) {
+    do {
+        do {
+            $businessDaysBack = $i + $skipDays
+            $testDate = $date.AddDays(-$businessDaysBack)
+            $passed = Test-BusinessDay $testDate 
+            if (!$passed) {
+                $skipDays++
+            }
+        } while (!$passed)
         $i++
-    } 
+    } while ($i -le $before)
     # uses that date
-    $reminderDate = $date.AddDays(-$i)
     # returns an object containing the date you asked for, it's weekday, the reminder date, it's weekday, and how many days back that is, useful since we multiply that to hours for the reminder date
     [PSCustomObject]@{
         Date               = $date
         WeekDay            = $date.DayOfWeek
-        BusinessDayBefore  = $reminderDate
-        BusinessDayWeekDay = $reminderDate.DayOfWeek
-        DateDiff           = $i
+        BusinessDayBefore  = $testDate
+        BusinessDayWeekDay = $testDate.DayOfWeek
+        DateDiff           = $businessDaysBack
+        BusinessDateDiff   = $before
     }
 }
