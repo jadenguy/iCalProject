@@ -43,6 +43,7 @@ Foreach ($i in $ICSlist ) {
         Subject  = $Subject
         Location = $Location
     }
+
     $outlook = new-object -com Outlook.Application
     $calendar = $outlook.Session.GetDefaultFolder(9)
     $appt = $calendar.Items.Add(1)
