@@ -1,5 +1,5 @@
 . $PSScriptRoot\Get-BusinessDay.ps1
-class IcsEvent {
+class CalendarEvent {
     # Properties
     [String] $Description
     [String] $Summary
@@ -11,31 +11,31 @@ class IcsEvent {
     [Boolean] $Reminder = $false
 
     # Constructors
-    IcsEvent() {
+    CalendarEvent() {
         $this.Summary = "New Event"
         $this.Description = $this.Summary
         $this.Start = Get-Date
         $this.End = $this.Start.addhours(1)
     }
-    IcsEvent([String] $EventName) {
+    CalendarEvent([String] $EventName) {
         $this.Summary = $EventName
         $this.Description = $this.Summary
         $this.Start = Get-Date
         $this.End = $this.Start.addhours(1)
     }
-    IcsEvent([Datetime] $StartDate) {
+    CalendarEvent([Datetime] $StartDate) {
         $this.Summary = "New Event"
         $this.Description = $this.Summary
         $this.Start = $StartDate
         $this.End = $this.Start.addhours(1)
     }
-    IcsEvent([String] $EventName, [Datetime] $StartDate) {
+    CalendarEvent([String] $EventName, [Datetime] $StartDate) {
         $this.Summary = $EventName
         $this.Description = $this.Summary
         $this.Start = $StartDate
         $this.End = $this.Start.addhours(1)
     }
-    IcsEvent([String] $EventName, [datetime] $StartDate, [int] $BusinessDaysBefore, [int] $HoursBefore = 0) {
+    CalendarEvent([String] $EventName, [datetime] $StartDate, [int] $BusinessDaysBefore, [int] $HoursBefore = 0) {
         $this.Summary = $EventName
         $this.Description = $this.Summary
         $this.Start = $StartDate
@@ -71,8 +71,6 @@ class IcsEvent {
         else {
             $reminderValid = $true
         }
-
-        # write-host $this.ToString()
         return $starts -and $startsBeforeEnds -and $reminderValid
     }
     [void] SetReminder([int]$BusinessDaysBefore, [int] $HoursBefore = 0) {
@@ -83,8 +81,8 @@ class IcsEvent {
         $this.Reminder = $true
         $this.ReminderDelta =  New-Timespan -Days (Get-FirstBusinessDayBeforeDate -date ($this.Start) -before $BusinessDaysBefore).DateDiff
     }
-    [IcsEvent]static Create() {
-        $event = New-Object "IcsEvent"
+    [CalendarEvent]static Create() {
+        $event = New-Object "CalendarEvent"
         return $event
     }
 }
@@ -92,7 +90,7 @@ function ConvertTo-iCal {
     [CmdletBinding()]
     param (
         [string]$calendar = "New_Calendar",
-        [Parameter(ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)][IcsEvent]$event,
+        [Parameter(ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)][CalendarEvent]$event,
         [TimeZoneInfo]$tz
     )
 
@@ -160,9 +158,9 @@ function ConvertTo-iCal {
     }
 }
 
-# $x = [IcsEvent]::new('hello', '2019-01-01 12:00')
-# $y = [IcsEvent]::new('hello', '2019-01-02 12:00')
-# $z = [IcsEvent]::new('hello', '2019-01-03 12:00', 0, 4)
+# $x = [CalendarEvent]::new('hello', '2019-01-01 12:00')
+# $y = [CalendarEvent]::new('hello', '2019-01-02 12:00')
+# $z = [CalendarEvent]::new('hello', '2019-01-03 12:00', 0, 4)
 # $x.Validate()
 # $y.validate()
 # $z.Validate()
