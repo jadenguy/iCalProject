@@ -1,5 +1,8 @@
+. $PSScriptRoot\CalendarEvent.ps1
+. $PSScriptRoot\Get-BusinessDay.ps1
 . $PSScriptRoot\ConvertTo-iCal.ps1
 . $PSScriptRoot\Add-OutlookEvent.ps1
+$global:holidays = (Import-Csv  $PSScriptRoot\holiday.csv ).date | ForEach-Object { get-date $_ }
 
 # Gets eventEntries table
 new-item -Path $PSScriptRoot -Name results -ItemType Directory -Force | Out-Null

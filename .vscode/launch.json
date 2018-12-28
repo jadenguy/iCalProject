@@ -17,7 +17,7 @@
             "type": "PowerShell",
             "request": "launch",
             "name": "Process",
-            "script": "${workspaceFolder}/csv_to_ical.ps1",
+            "script": "${workspaceFolder}/process.ps1",
             "args": [],
             "cwd": "${workspaceFolder}"
         }

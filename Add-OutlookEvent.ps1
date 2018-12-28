@@ -1,5 +1,3 @@
-. $PSScriptRoot\ConvertTo-iCal.ps1
-
 function Add-OutlookEvent {
     [CmdletBinding()]
     param (

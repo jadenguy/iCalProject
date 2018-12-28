@@ -1,4 +1,3 @@
-$global:holidays = (Import-Csv .\holiday.csv ).date | ForEach-Object { get-date $_ }
 #this function checks to see if a day is a weekend or a holiday, and returns a true (m-f) or false (s-s)
 function Test-BusinessDay {
     [CmdletBinding()]
@@ -8,7 +7,7 @@ function Test-BusinessDay {
     # weekends include days 0 and 6
     $weekend = ( (0, 6) -contains $date.DayOfWeek  )
     # midnights considered only from global holiday list
-    $holiday = $global:holidays -contains $date.Date
+    $holiday = $holidays -contains $date.Date
     # it's only a business day if it's not a weekend or holiday, so return true then
     $valid = !$weekend -and !$holiday
     return $valid
