@@ -6,7 +6,7 @@ $global:holidays = (Import-Csv  $PSScriptRoot\holiday.csv ).date | ForEach-Objec
 
 # Gets eventEntries table
 new-item -Path $PSScriptRoot -Name results -ItemType Directory -Force | Out-Null
-$table = Get-Content .\events.csv|ConvertFrom-Csv
+$table = Get-Content  $PSScriptRoot\events.csv|ConvertFrom-Csv
 # Creates list of each type of heading in eventEntries table
 $calendars = $table | Group-Object -property 'TYPE'
 # Goes through list again, once per event type

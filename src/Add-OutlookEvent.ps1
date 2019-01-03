@@ -17,7 +17,7 @@ function Add-OutlookEvent {
             $appt.Start = $event.Start
             $appt.End = $event.End
             $appt.Subject = $event.Summary
-            $appt.Categories = "Presentations" #Pick your own category!
+            $appt.Categories = "Payroll" #Pick your own category!
             $appt.BusyStatus = 0   # 0=Free
             $appt.Location = $event.Location
             $appt.Body = $event.Description

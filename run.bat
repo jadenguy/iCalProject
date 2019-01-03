@@ -1,1 +1,0 @@
-powershell -executionpolicy bypass -File csv_to_ical.ps1
