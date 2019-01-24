@@ -5,7 +5,7 @@
 $global:holidays = (Import-Csv  $PSScriptRoot\holiday.csv ).date | ForEach-Object { get-date $_ }
 
 # Gets eventEntries table
-new-item -Path $PSScriptRoot -Name results -ItemType Directory -Force | Out-Null
+$resultsFolder = new-item -Path $PSScriptRoot -Name results -ItemType Directory -Force
 $table = Get-Content  $PSScriptRoot\events.csv|ConvertFrom-Csv
 # Creates list of each type of heading in eventEntries table
 $calendars = $table | Group-Object -property 'TYPE'
@@ -20,7 +20,8 @@ $calendars | ForEach-Object {
         $event = $_
         $args = @{
             Summary     = $event.TYPE
-            Description = $event.TYPE
+            Description = $event.TYPE+ "at https://ew43.ultipro.com/"
+            Location    = "https://ew43.ultipro.com/"
             Start       = (get-date $event.DATE).AddHours(8)
             End         = (get-date $event.DATE).AddHours(12)
         }
@@ -31,10 +32,11 @@ $calendars | ForEach-Object {
         }
     }
     # and this writes the file out
+    $icalPath = join-path $resultsFolder "$calendarName.ics"
     $ical = $eventEntries | ConvertTo-iCal -calendar $calendarName 
-    $ical | Set-Content ".\results\$calendarName.ics"
+    $ical | Set-Content $icalPath
     #".\results\$calendarName.ics"
-    Start-Process ".\results\$calendarName.ics" # uncomment this line to open each file on creation
+    Start-Process $icalPath # uncomment this line to open each file on creation
     # $eventEntries | Add-OutlookEvent
     
 }
