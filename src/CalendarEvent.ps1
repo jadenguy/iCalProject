@@ -1,5 +1,5 @@
 class CalendarEvent {
-    # Properties
+    #region  Properties
     [String] $Description
     [String] $Summary
     [String] $Location
@@ -8,8 +8,8 @@ class CalendarEvent {
     [Datetime] $End
     [TimeSpan] $ReminderDelta
     [Boolean] $Reminder = $false
-
-    # Constructors
+    #endregion
+    #region Constructors
     CalendarEvent() {
         $this.Summary = "New Event"
         $this.Description = $this.Summary
@@ -42,8 +42,8 @@ class CalendarEvent {
         $this.ReminderDelta = New-Timespan -Days (Get-FirstBusinessDayBeforeDate -date ($StartDate) -before $BusinessDaysBefore).DateDiff -Hours $HoursBefore
         $this.Reminder = $true
     }
-
-    # Methods
+    #endregion
+    #region Methods
     [string] ToString() { return $this.Render() }
     hidden [string] Render() {
         $ret = $this.Summary 
@@ -84,4 +84,5 @@ class CalendarEvent {
         $event = New-Object "CalendarEvent"
         return $event
     }
+    #endregion
 }
