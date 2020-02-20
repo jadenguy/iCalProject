@@ -6,7 +6,7 @@ $global:holidays = (Import-Csv  $PSScriptRoot\holiday.csv ).date | ForEach-Objec
 
 # Gets eventEntries table
 $resultsFolder = new-item -Path $PSScriptRoot -Name results -ItemType Directory -Force
-$table = Get-Content  $PSScriptRoot\events.csv|ConvertFrom-Csv
+$table = Get-Content  $PSScriptRoot\events.csv | ConvertFrom-Csv
 # Creates list of each type of heading in eventEntries table
 $calendars = $table | Group-Object -property 'TYPE'
 # Goes through list again, once per event type
@@ -20,10 +20,10 @@ $calendars | ForEach-Object {
         $event = $_
         $args = @{
             Summary     = $event.TYPE
-            Description = $event.TYPE+ "at https://ew43.ultipro.com/"
-            Location    = "https://ew43.ultipro.com/"
-            Start       = (get-date $event.DATE).AddHours(8)
-            End         = (get-date $event.DATE).AddHours(12)
+            Description = Get-Content $PSScriptRoot\body.md -raw
+            Location    = "707 W Lutz Lake Fern Rd, Lutz, FL 33548"
+            Start       = (get-date $event.DATE).AddHours(7.5)
+            End         = (get-date $event.DATE).AddHours(17)
         }
         $CalendarEvent = New-Object "CalendarEvent" -Property $args
         $CalendarEvent.SetReminder( $event.BEFORE, 0)

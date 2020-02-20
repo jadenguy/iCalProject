@@ -17,7 +17,7 @@
             "type": "PowerShell",
             "request": "launch",
             "name": "Process",
-            "script": "${workspaceFolder}/process.ps1",
+            "script": "${workspaceFolder}/src/process.ps1",
             "args": [],
             "cwd": "${workspaceFolder}"
         }
